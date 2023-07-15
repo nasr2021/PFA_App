@@ -3,7 +3,7 @@ import {Button,Stack,VStack,FormControl,FormLabel,Input,Textarea,Modal,ModalOver
 import { db,storageRef,storage,auth ,fieldValue} from "../../../firebase/firebase-config";
 import FiliereForm from "./fiterForm";
 import { useNavigate } from "react-router-dom";
-const ButtonWidget = ({ label, type,courseId,formationId}) => {
+const ButtonWidget = ({ label, type,courseId,formationId,packId }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({});
   const [clickCount, setClickCount] = useState(0);
@@ -581,16 +581,34 @@ const ButtonWidget = ({ label, type,courseId,formationId}) => {
                   });
               } else {
                 alert("Cette formation n'est pas gratuite.");
-              }
-            }
-          });
-      }
+              }  } }); }
     }
-    
-    
     else if (type === "modal7") {
     console.log("Cours ID:", courseId);
-    const dataWithFileURL = { ...formData, image: formData.fileURL };
+    const { image, links, video, pdf, ...restData } = formData;
+      // Convert the links field to an array if it has a value
+      const linksArray = links && links.trim() !== '' ? links.split(',').map((value) => value.trim()) : [];
+    
+      // Convert the video field to an array if it has a value
+      const videosArray = Array.isArray(video) ? video : video && video.trim() !== '' ? [video.trim()] : [];
+    
+      // Convert the pdf field to an array if it has a value
+  const pdfsArray = Array.isArray(pdf) ? pdf : pdf && pdf.trim() !== '' ? [pdf.trim()] : [];
+
+    const dataWithFileURL = {
+      ...restData,
+      links: linksArray,
+      image: image || '', // Set a default value for the image field if it is undefined
+      video: videosArray,
+     // pdf: pdfsArray,
+      fileURL: formData.fileURL || '', // Set a default value for the fileURL field if it is undefined
+     // pdfURL: formData.pdfURL || '',
+      tarife: tarife,
+    };
+      // Update the pdf field with the values from pdfsArray
+  if (pdfsArray.length > 0) {
+    dataWithFileURL.pdf = fieldValue.arrayUnion(...pdfsArray);
+  }
 
     db.collection("cours")
       .doc(courseId)
@@ -624,7 +642,66 @@ const ButtonWidget = ({ label, type,courseId,formationId}) => {
       .catch((error) => {
         console.error("Erreur lors de la recherche de la timetable :", error);
       });
-  } else if (type === "modal10") {
+  }else if (type === 'modal16') {
+    console.log('packId', packId);
+    const user = auth.currentUser;
+    const userId = user.uid;
+  console.log("userId",userId);
+    // Retrieve the pack document
+    db.collection('pack')
+      .doc(packId)
+      .get()
+      .then((packDoc) => {
+        if (packDoc.exists) {
+          const packData = packDoc.data();
+          const nbrCommpte = packData.nbrCommpte || 0; // Get the nbrCommpte value from the pack document
+          const nbrCours = packData.nbrCours || 0; // Get the nbrCours value from the pack document
+  const nbrFormation=packData.nbrFormation|| 0;
+          // Increment the pt value of the user document by nbrCommpte
+          db.collection('user')
+            .doc(userId)
+            .update({
+              pack: fieldValue.increment(nbrCommpte),
+            })
+            .then(() => {
+              console.log('pt value incremented by nbrCommpte');
+            })
+            .catch((error) => {
+              console.error('Error updating pt value:', error);
+            });
+    // Increment the pt value of the user document by nbrCommpte
+    db.collection('user')
+    .doc(userId)
+    .update({
+      nbrFormation: fieldValue.increment(nbrFormation),
+    })
+    .then(() => {
+      console.log('pt value incremented by nbrFormation');
+    })
+    .catch((error) => {
+      console.error('Error updating pt value:', error);
+    });
+          // Increment the coursnbr value of the user document by nbrCours
+          db.collection('user')
+            .doc(userId)
+            .update({
+              coursnbr: fieldValue.increment(nbrCours),
+            })
+            .then(() => {
+              console.log('coursnbr value incremented by nbrCours');
+            })
+            .catch((error) => {
+              console.error('Error updating coursnbr value:', error);
+            });
+        } else {
+          console.log('Pack document does not exist');
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching pack document:', error);
+      });
+  }
+   else if (type === "modal10") {
     const dataWithFileURL = { ...formData };
     db.collection("pack").add(dataWithFileURL) .then((docRef) => {
       // Récupérer l'ID du document créé
@@ -686,8 +763,31 @@ const ButtonWidget = ({ label, type,courseId,formationId}) => {
 
 } else if (type === "modal14") {
   console.log("Cours ID:", formationId);
-  const dataWithFileURL = { ...formData, image: formData.fileURL };
+  const { image, links, video, pdf, ...restData } = formData;
+  // Convert the links field to an array if it has a value
+  const linksArray = links && links.trim() !== '' ? links.split(',').map((value) => value.trim()) : [];
 
+  // Convert the video field to an array if it has a value
+  const videosArray = Array.isArray(video) ? video : video && video.trim() !== '' ? [video.trim()] : [];
+
+  // Convert the pdf field to an array if it has a value
+const pdfsArray = Array.isArray(pdf) ? pdf : pdf && pdf.trim() !== '' ? [pdf.trim()] : [];
+
+ 
+const dataWithFileURL = {
+  ...restData,
+  links: linksArray,
+  image: image || '', // Set a default value for the image field if it is undefined
+  video: videosArray,
+ // pdf: pdfsArray,
+  fileURL: formData.fileURL || '', // Set a default value for the fileURL field if it is undefined
+ // pdfURL: formData.pdfURL || '',
+  tarife: tarife,
+};
+ // Update the pdf field with the values from pdfsArray
+ if (pdfsArray.length > 0) {
+  dataWithFileURL.pdf = fieldValue.arrayUnion(...pdfsArray);
+}
   db.collection("formation")
     .doc(formationId)
     .update(dataWithFileURL)
@@ -1104,6 +1204,22 @@ const ButtonWidget = ({ label, type,courseId,formationId}) => {
               onChange={(e) => handleInputChange(e, "description")}
             />
           </FormControl>
+          <FormControl>
+    <FormLabel htmlFor="links">Liens</FormLabel>
+    <Input type="text" id="links" name="links" value={formData.links || ""}  onChange={(e) => handleInputChange(e, "links")}  />
+  </FormControl>
+  
+  <FormControl>
+    
+    <FormLabel htmlFor="video">Vidéos</FormLabel>
+    <Input type="file" id="video" name="video" multiple  onChange={(e) => handleFileChange(e, "video")}  />
+  </FormControl>
+        
+
+  <FormControl>
+  <FormLabel htmlFor="pdf">PDF</FormLabel>
+  <Input id="pdf" type="file" multiple onChange={(e) => handleFileChange(e, "pdf")} />
+</FormControl>
         </>
       );
     }
@@ -1277,7 +1393,25 @@ const ButtonWidget = ({ label, type,courseId,formationId}) => {
             )}
           </>
         );
-      } 
+      }  else if (type === "modal16") {
+        return (
+          <> 
+         <FormControl>
+          <FormLabel htmlFor="titre">nombre de compte</FormLabel>
+          <Input
+            type="text"
+            id="nbrCommpte"
+            name="nbrCommpte"
+            value={formData.nbrCommpte ||""}
+            onChange={(e) => handleInputChange(e, "nbrCommpte")}
+          />
+        </FormControl>
+         
+          
+        </>
+        );
+      
+    }
     else if (type === "modal10") {
       return (<>
        <FormControl>

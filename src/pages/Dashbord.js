@@ -163,7 +163,7 @@ return(
         </Flex>
       </TabPanel>
       <TabPanel>
-        <Flex flexWrap="wrap" gap={2} p={2}>
+        <Flex flexWrap="wrap" gap={3}>
           {formations.map((formation) => (
             <Card key={formation.id} formation={formation} />
           ))}
@@ -175,7 +175,10 @@ return(
    
    
   </Grid>
+  <Box overflowy={{ base: 'unset', md: 'auto' }} maxh={{ base: 'unset', md: '30%' }}>
   <ExamTable exams={exams} />
+</Box>
+
   <Packs />
 </>
 

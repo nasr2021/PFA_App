@@ -141,14 +141,14 @@ const Card = ({formation}) => {
       width={{ base: "100%", md: "calc(33.33% - 20px)" }}
       margin={2}
     >
-      <Flex position={"absolute"} mb={12} pb={12} direction={{ base: "column", md: "row" }}>
+      <Flex position={"absolute"} mb={12} mt={3} pb={12} direction={{ base: "column", md: "row" }}>
         <Avatar size={"md"} src={avatar} mx={4} alt="Person" />
         <Box as="badge" p={3} bg={"gray.100"} border={"2px"} borderColor={"white"} borderRadius={"2xl"}>
           {profession}
         </Box>
       </Flex>
       <Box 
-        bg={"white"}
+        bg={"white"} 
         mt={{ base: 12, md: 0 }}
         width="100%"
         maxWidth={{ base: "auto", md: "sm" }}
@@ -158,7 +158,7 @@ const Card = ({formation}) => {
         boxShadow="md"
       >
         <Box p={4}>
-          <Heading as="h2" size="lg" mt={3}>
+          <Heading as="h2" size="lg" mt={12}>
             {title}
           </Heading>
           <Flex justifyContent={"space-between"} mt={2}>
@@ -192,13 +192,16 @@ const Card = ({formation}) => {
             {description}
           </Text>
           <>
-    {formationsId !== formationId ? (
+    {userRole !== "admin" &&formationsId !== formationId ? (
       <ButtonWidget label="participer" type="modal6" formationId={formation.formationId} />
     ) : (
-      <Button size="sm" colorScheme="blue" ml={2} onClick={handleParticipate}>
+      <Button p={4} height={"100%"}
+      mr={3}
+      size="md" onClick={handleParticipate}>
         voir
       </Button>
     )}
+    
   </>
   <>      {userRole === "admin" && (
             <ButtonWidget label="modifier"  type="modal14"  formationId={formation.formationId}  />

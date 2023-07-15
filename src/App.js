@@ -33,29 +33,9 @@ import { db,auth } from "./firebase/firebase-config";
 import { useEffect } from "react";
 import DetailsFormation from "./components/Shared/details";
 function App() {
-  const [isAuth, setIsAuth] = useState(false);
+  const [isAuth, setIsAuth] = useState(true);
   console.log(isAuth);
-  useEffect(() => {
-    if (isAuth==false) {
-      const handleLogout = async () => {
-        try {
-          // Effectuer les étapes de déconnexion ici, par exemple :
-          const user = auth.currentUser;
-          const userId = user.uid;
-          
-          await db.collection('user').doc(userId).update({
-            stat: false
-          });
-          console.log(isAuth);
-          //console.log(stat);
-        } catch (error) {
-          console.error('Erreur lors de la déconnexion :', error);
-        }
-      };
-  
-      handleLogout(); // Appeler la fonction de déconnexion lorsque isAuth devient false
-    }
-  }, [isAuth]);
+
   
   return (
     <Router>
@@ -71,7 +51,7 @@ function App() {
           {/* Content */}
          
           <Box flex="1" overflowY="auto" bg={"gray.100"}   >
-            
+             
             <Routes>
             {/* <Route
           path="/"
@@ -81,37 +61,39 @@ function App() {
           path="/login"
           element={isAuth ? <Navigate to="/Dashboard" /> : <LoginApp setIsAuth={setIsAuth}/>}
         /> */}
-              <Route path="/logout" element={<Logout setIsAuth={setIsAuth} />} />
-              <Route path="/SignupEtudiant" element={<SignupEtudiant setIsAuth={setIsAuth} />} />
-              <Route path="/card" element={<Card setIsAuth={setIsAuth} />} />
-             <Route path="/Dashboard" element={<Dashboard setIsAuth={setIsAuth} />} /> 
-              <Route path="/cour" element={<Course setIsAuth={setIsAuth} />} />
-              <Route path="/examen" element={<Examen setIsAuth={setIsAuth} />} />
-              <Route path="/Bourse" element={<Bourse setIsAuth={setIsAuth} />} />
+              <Route path="/logout" element={<Logout  />}  />
+              <Route path="/SignupEtudiant" element={<SignupEtudiant  />} />
+              <Route path="/card" element={<Card  />} />
+              <Route path="/Dashboard" element={<Dashboard />} />
+              <Route path="/cour" element={<Course  />} />
+              <Route path="/examen" element={<Examen  />} />
+              <Route path="/Bourse" element={<Bourse  />} />
               <Route path="/Formation" element={<Formation />} />
-              <Route path="/Stage" element={<Stage setIsAuth={setIsAuth} />} />
+              <Route path="/Stage" element={<Stage  />} />
               <Route path="/Renseinne" element={<SchoolForm />} />
-              <Route path="/Archive" element={<ReportTable setIsAuth={setIsAuth} />} />
-              <Route path="/Note" element={<GradeTable setIsAuth={setIsAuth} />} />
-              <Route path="/EmploiDeTemp" element={<PDFViewer setIsAuth={setIsAuth} />} />
-              <Route path="/Reclamation" element={<ReclamationPage setIsAuth={setIsAuth} />} />
-              <Route path="/Simple" element={<Simple setIsAuth={setIsAuth} />} />
-              <Route path="/DetailsFormation" element={<DetailsFormation setIsAuth={setIsAuth} />} />
+              <Route path="/Archive" element={<ReportTable />} />
+              <Route path="/Note" element={<GradeTable  />} />
+              <Route path="/EmploiDeTemp" element={<PDFViewer />} />
+              
+              <Route path="/Simple" element={<Simple  />} />
+              <Route path="/DetailsFormation" element={<DetailsFormation />} />
             
               {/* <Route path="/Parametre" element={<ComponentPurchase setIsAuth={setIsAuth} />} /> */}
             </Routes>
-          </Box>
+          </Box> 
         </Flex>
         
       
       </Flex>
         
-      ) : (<Box height={'100vh'} overflowY="auto" bg={"gray.100"}   >
-        <Routes>
+      ) : (
+      <Box height={'100vh'} overflowY="auto" bg={"gray.100"}   >
+       <Routes>
           <Route path="/" element={<LoginApp setIsAuth={setIsAuth} />} />
           <Route path="/signup" element={<SignupApp setIsAuth={setIsAuth} />} />
-      
-        </Routes></Box>
+          <Route path="/Reclamation" element={<ReclamationPage  />} />
+        </Routes>
+         </Box>
       )}
     </Router>
   );

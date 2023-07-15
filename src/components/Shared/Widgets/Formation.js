@@ -1,5 +1,5 @@
 import { Box, Flex, Text, Image, Heading, IconButton, Input, Button, useBreakpointValue,useToast } from "@chakra-ui/react";
-import { FaLock, FaComment } from "react-icons/fa";
+import { FaLock, FaUnlock,FaComment } from "react-icons/fa";
 import { db, auth,fieldValue } from "../../../firebase/firebase-config";
 import { useState } from "react";
 import ButtonWidget from "./Button";
@@ -138,8 +138,11 @@ const  CardCour = ({ cour }) => {
             <Text mt={2} color="gray.500">
               {date}
             </Text>
-            <IconButton aria-label="Toggle Payment" icon={<FaLock />} variant="ghost" size="sm" />
-          </Flex>
+            {isRegistered ? (
+            <IconButton aria-label="Toggle Payment" icon={<FaUnlock />} variant="ghost" size="sm" />
+            ) : ( <IconButton aria-label="Toggle Payment" icon={<FaLock />} variant="ghost" size="sm" />
+            )}
+            </Flex>
         </Flex>
         <Text mt={4} fontSize="sm">
           {description}

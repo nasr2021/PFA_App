@@ -35,6 +35,11 @@ export default function Packs() {
   const [subjectsp1, setSubjectsp1] = useState([]);
   const [subjectsp2, setSubjectsp2] = useState([]);
   const [subjectsp3, setSubjectsp3] = useState([]);
+  const [packId, setpackId] = useState("");
+  const handleBuyClick = (packId) => {
+    setpackId(packId);
+    console.log('Achat du pack avec l\'ID:', packId);
+  };
   useEffect(() => {
     const fetchNotes = async () => {
       try {
@@ -135,7 +140,8 @@ export default function Packs() {
               </ListItem>
             </List>
             <Box w="80%" pt={7} >
-            <ButtonWidget label="achete" type="modal16" />
+            <ButtonWidget label="Acheter" type="modal16" packId={packId} onClick={() => handleBuyClick(packId)} />
+
             </Box>
           </VStack></Box>))}
         </PriceWrapper>
@@ -156,7 +162,7 @@ export default function Packs() {
                 fontSize="sm"
                 fontWeight="600"
                 rounded="xl">
-                Most Popular
+                
               </Text>
             </Box>
             <Box py={4} px={12}>
@@ -174,7 +180,7 @@ export default function Packs() {
               </HStack>
             </Box>
             <VStack
-           //   bg={useColorModeValue('gray.50', 'gray.700')}
+              bg={'gray.50'}
               py={4}
               borderBottomRadius={'xl'}>
               <List spacing={3} textAlign="start" px={12}>
@@ -200,7 +206,8 @@ export default function Packs() {
                 </ListItem>
               </List>
               <Box w="80%" pt={7}>
-              <ButtonWidget label="Achete" type="modal16" />
+              <ButtonWidget label="Acheter" type="modal16" packId={packId} onClick={() => handleBuyClick(packId)} />
+
               </Box>
             </VStack>
           </Box></Box>))}
@@ -244,7 +251,7 @@ export default function Packs() {
               </ListItem>
             </List>
             <Box w="80%" pt={7}>
-            <ButtonWidget label="achete" type="modal16" />
+            <ButtonWidget label="Acheter" type="modal16" packId={packId} onClick={() => handleBuyClick(packId)} />
             </Box>
           </VStack>
           </Box>))}</PriceWrapper>

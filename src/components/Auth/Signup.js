@@ -1,5 +1,5 @@
 import React, { useState ,useEffect} from 'react';
-import { Box, Flex, Select, Button, FormControl, FormLabel, Input, Stack, Image,Text ,Container} from '@chakra-ui/react';
+import { Box, useBreakpointValue, Flex, Select, Button, FormControl, FormLabel, Input, Stack, Image,Text ,Container} from '@chakra-ui/react';
 import { auth, db } from '../../firebase/firebase-config';
 
 export default function SignupApp() {
@@ -64,17 +64,22 @@ export default function SignupApp() {
   
     return () => unsubscribe();
   }, []);
-  
+  const boxSize = useBreakpointValue({ base: '100%', sm: '100%', md: '100%', lg: '50vw' });
+  const textAlign = useBreakpointValue({ base: 'center', sm: 'center', md: 'start', lg: 'start' });
+  const fontSize = useBreakpointValue({ base: 'xl', sm: 'xl', md: '2xl', lg: '6xl' });
+  const display = useBreakpointValue({ base: 'flex', sm: 'flex', md: 'flex', lg: 'flex' });
+
   
   return (
     <Box  mx={12} bg={"gray.100"} >
       <Flex direction={["column", "row"]} align="center" justify="center" py={5} flex={1} >
-        <Box flex="1" mb={[5, 0]} textAlign={["center", "start"]}>
-          <Text as="h1" fontSize="6xl" fontWeight="bold" letterSpacing="tight" my={5}>
+        
+        <Box flex="1" textAlign={textAlign} mb={[5, 0]} textAlign={["center", "start"]}>
+          <Text as="h1"   display={display} fontSize={fontSize} fontWeight="bold" letterSpacing="tight" my={5}>
           SmartEduHub.com <br />
             
           </Text>
-          <Text color="hsl(217, 10%, 50.8%)" mb={5}>
+          <Text   display={display} color="hsl(217, 10%, 50.8%)" mb={5}>
           SmartEduHub.com est un site web d'éducation en ligne qui
            offre une plateforme conviviale et attrayante pour
            les étudiants et les professionnels souhaitant approfondir 
@@ -82,7 +87,7 @@ export default function SignupApp() {
           </Text>
         </Box>
 
-        <Box flex="1" ml={[0, 10]} w={"50vw"} mt={12}>
+        <Box flex="1" ml={[0, 10]} w={boxSize} mt={12}>
           <Box bg="white" borderRadius="md" mt={12} boxShadow="md" py={5} px={[4, 10]}>
             
       <form onSubmit={handleSignup}>

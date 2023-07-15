@@ -40,18 +40,28 @@ const Sidebar = ({active,setIsAuth,isAuth}) => {
      if (userId) {
        fetchUserDocument(userId);
      } }, []);
-     const handleLogout = () => {
-       // Sign out the user
-       auth.signOut()
-         .then(() => {
-           // Clear authentication state and navigate to the desired page
-           localStorage.removeItem("isAuth");
-           setIsAuth(false);
-           navigate("/login");
-          
-         })
-        
-     };
+    
+     const handleLogout = async () => {
+      try {
+        // Perform the sign out process
+        await auth().signOut();
+    
+        // Update the user status in the "user" collection
+        const user = auth().currentUser;
+        const userId = user.uid;
+    
+        await db.collection('user').doc(userId).update({
+          stat: false
+        });
+    
+        // Perform other actions after successful logout
+      } catch (error) {
+        console.error('Error during logout:', error);
+        // Handle the error (e.g., display an error message)
+      }
+    };
+    
+    
     return (
      <Flex 
      pos={"sticky"}
@@ -246,12 +256,12 @@ const Sidebar = ({active,setIsAuth,isAuth}) => {
              p={2}
                borderRadius={8}
                _hover={{textDecor:'none', backgroundColor:"gray.100"}}
-                w={navSize=="large" && "100%"}     
-                onClick={handleLogout}
+                w={navSize=="large" && "100%"}    onClick={handleLogout} href='/'
+              
     > 
   
   
-         <MenuButton fontSize={"xl"}  w={"100%"}>
+         <MenuButton fontSize={"xl"}  w={"100%"} >
       <Flex>  <BiSolidLogOut  color={active? "white":"black"} />
           <Text ml={6} display={navSize=="small"? "none":"flex"}>logout</Text>
           </Flex>  </MenuButton> 
