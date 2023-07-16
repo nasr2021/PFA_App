@@ -29,7 +29,7 @@ import CardCour from './Formation';
         isIndeterminate={isIndeterminate}
         onChange={handleSelectAll} 
       >
-        Select All
+        Selectione tous
       </Checkbox>
       <Stack spacing={3}   >
         {filters.map((filter) => (

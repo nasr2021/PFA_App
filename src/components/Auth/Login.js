@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import {
   Box,
   Flex,
@@ -15,12 +15,18 @@ import { db, auth } from '../../firebase/firebase-config';
 import { useNavigate } from 'react-router-dom';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 
-export default function LoginApp({ setIsAuth }) {
+export default function LoginApp({ setIsAuth,isAuth }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
-
+  useEffect(() => {
+    // Récupérer l'état d'authentification depuis le stockage (LocalStorage, cookies, etc.)
+    const storedAuth = localStorage.getItem('isAuthenticated');
+    if (storedAuth) {
+      setIsAuth(JSON.parse(storedAuth));
+    }
+  }, []);
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -79,7 +85,7 @@ export default function LoginApp({ setIsAuth }) {
                 </Alert>
               )}
               <FormControl >
-                <FormLabel>Email</FormLabel>
+                <FormLabel>E-mail</FormLabel>
                 <Input
                   type="email"
                   value={email}

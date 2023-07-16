@@ -53,7 +53,8 @@ const Sidebar = ({active,setIsAuth,isAuth}) => {
         await db.collection('user').doc(userId).update({
           stat: false
         });
-    
+        setIsAuth(false);
+      //  localStorage.removeItem('isAuth');
         // Perform other actions after successful logout
       } catch (error) {
         console.error('Error during logout:', error);
@@ -105,7 +106,7 @@ const Sidebar = ({active,setIsAuth,isAuth}) => {
     
          <MenuButton fontSize={"xl"} w={"100%"}>
          <Flex>    <AiFillLayout  color={active? "white":"black"} />
-          <Text ml={6} display={navSize=="small"? "none":"flex"}>Dashboard</Text>
+          <Text ml={6} display={navSize=="small"? "none":"flex"}>Tableau de bord</Text>
           </Flex>    </MenuButton> 
         </Link>
        
@@ -136,7 +137,7 @@ const Sidebar = ({active,setIsAuth,isAuth}) => {
    
          <MenuButton fontSize={"xl"}  w={"100%"}>
          <Flex>      <IoInformationCircleSharp  color={active? "white":"black"} />
-          <Text ml={6}  display={navSize=="small"? "none":"flex"}>Formation</Text>
+          <Text ml={6}  display={navSize=="small"? "none":"flex"}>Formations</Text>
           </Flex> </MenuButton> 
         </Link>
         <Link bg={active && "gray.100"}
@@ -150,7 +151,7 @@ const Sidebar = ({active,setIsAuth,isAuth}) => {
   
          <MenuButton fontSize={"xl"}  w={"100%"}>
      <Flex>    <MdRateReview  color={active? "white":"black"} />
-          <Text ml={6} display={navSize=="small"? "none":"flex"}>Examen</Text>
+          <Text ml={6} display={navSize=="small"? "none":"flex"}>Examens</Text>
           </Flex>     </MenuButton> 
       </Link>
         <Link bg={active && "gray.100"}
@@ -164,7 +165,7 @@ const Sidebar = ({active,setIsAuth,isAuth}) => {
    
          <MenuButton fontSize={"xl"}  w={"100%"}>
      <Flex>    <BiWorld  color={active? "white":"black"} />
-          <Text ml={6} display={navSize=="small"? "none":"flex"}>Bourse</Text>
+          <Text ml={6} display={navSize=="small"? "none":"flex"}>Bourses</Text>
           </Flex>      </MenuButton> 
     </Link>
         <Link bg={active && "gray.100"}
@@ -178,7 +179,7 @@ const Sidebar = ({active,setIsAuth,isAuth}) => {
    
          <MenuButton fontSize={"xl"}  w={"100%"}>
      <Flex>    <BsFillFileEarmarkPostFill  color={active? "white":"black"} />
-          <Text ml={6} display={navSize=="small"? "none":"flex"}>Stage</Text>
+          <Text ml={6} display={navSize=="small"? "none":"flex"}>Stages</Text>
           </Flex>  </MenuButton> 
       </Link>
         <Link bg={active && "gray.100"}
@@ -192,7 +193,7 @@ const Sidebar = ({active,setIsAuth,isAuth}) => {
   
          <MenuButton fontSize={"xl"}  w={"100%"}>
        <Flex>  <MdFindInPage  color={active? "white":"black"} />
-          <Text ml={6} display={navSize=="small"? "none":"flex"}>Fiche</Text>
+          <Text ml={6} display={navSize=="small"? "none":"flex"}>Fiches</Text>
           </Flex>    </MenuButton> 
       </Link>
         <Link bg={active && "gray.100"}
@@ -206,7 +207,7 @@ const Sidebar = ({active,setIsAuth,isAuth}) => {
    <Flex >
          <MenuButton fontSize={"xl"}  w={"100%"}>
       <Flex>   <AiFillHdd  color={active? "white":"black"} />
-          <Text ml={6} display={navSize=="small"? "none":"flex"}>Archive</Text>
+          <Text ml={6} display={navSize=="small"? "none":"flex"}>Archives</Text>
           </Flex>   </MenuButton> 
         </Flex></Link>
         <Link bg={active && "gray.100"}
@@ -220,7 +221,7 @@ const Sidebar = ({active,setIsAuth,isAuth}) => {
 
          <MenuButton fontSize={"xl"}  w={"100%"}>
       <Flex>   <BiSolidNotepad  color={active? "white":"black"} />
-          <Text ml={6} display={navSize=="small"? "none":"flex"}>Note</Text>
+          <Text ml={6} display={navSize=="small"? "none":"flex"}>Notes</Text>
           </Flex>    </MenuButton> 
       </Link>
         <Link bg={active && "gray.100"}
@@ -234,7 +235,7 @@ const Sidebar = ({active,setIsAuth,isAuth}) => {
   
          <MenuButton fontSize={"xl"}  w={"100%"}>
         <Flex> <AiFillSchedule  color={active? "white":"black"} />
-          <Text ml={6} display={navSize=="small"? "none":"flex"}>Emploi</Text>
+          <Text ml={6} display={navSize=="small"? "none":"flex"}>Emplois</Text>
           </Flex> </MenuButton> 
       </Link>
         <Link bg={active && "gray.100"}
@@ -248,7 +249,7 @@ const Sidebar = ({active,setIsAuth,isAuth}) => {
    
          <MenuButton fontSize={"xl"}  w={"100%"}>
         <Flex> <AiFillMail color={active? "white":"black"} />
-          <Text ml={6} display={navSize=="small"? "none":"flex"}>Signup Etudiant</Text>
+          <Text ml={6} display={navSize=="small"? "none":"flex"}>Inscription </Text>
           </Flex> </MenuButton> 
       </Link>
         
@@ -263,7 +264,7 @@ const Sidebar = ({active,setIsAuth,isAuth}) => {
   
          <MenuButton fontSize={"xl"}  w={"100%"} >
       <Flex>  <BiSolidLogOut  color={active? "white":"black"} />
-          <Text ml={6} display={navSize=="small"? "none":"flex"}>logout</Text>
+          <Text ml={6} display={navSize=="small"? "none":"flex"}>Déconecter</Text>
           </Flex>  </MenuButton> 
         </Link>
 

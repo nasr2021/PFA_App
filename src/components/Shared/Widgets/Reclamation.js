@@ -28,7 +28,7 @@ const ComplaintsList = () => {
   const [complaints, loading, error] = useCollectionData(db.collection("reclamation"), { idField: 'id' });
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <CircularProgress color="purple" isIndeterminate />;
   }
 
   if (error) {

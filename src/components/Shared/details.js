@@ -1,4 +1,4 @@
-import { Box, chakra, Container, Stack, Text, Image, Flex, VStack, Button, Heading, SimpleGrid, StackDivider, useColorModeValue, VisuallyHidden, List,  ListItem, Link,} from '@chakra-ui/react';
+import { Box, chakra, Container, Stack, Text, Image, Flex, VStack,CircularProgress, Button, Heading, SimpleGrid, StackDivider, useColorModeValue, VisuallyHidden, List,  ListItem, Link,} from '@chakra-ui/react';
 import { FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
 import { MdLocalShipping } from 'react-icons/md';
 import React ,{ useState, useEffect } from 'react';
@@ -47,7 +47,7 @@ export default function DetailsFormation() {
   }, [coursId]);
 
   if (!coursData) {
-    return <div>Loading...</div>;
+    return <CircularProgress color="purple" isIndeterminate />;
   }
   const handleTerminerClick = async () => {
     const userId = auth.currentUser ? auth.currentUser.uid : null;
@@ -99,7 +99,7 @@ export default function DetailsFormation() {
           <List >
           <ListItem alignItems={"flex-start"}>
   <Text as={'span'} fontWeight={'bold'}>
-    Comment:
+  Commentaire:
   </Text>{' '}
   {coursData.comments && Array.isArray(coursData.comments) ? (
     coursData.comments.map((comment, index) => (
@@ -110,7 +110,7 @@ export default function DetailsFormation() {
       </Box>
     ))
   ) : (
-    <span>No comments available</span>
+    <span>Aucun commentaire disponible</span>
   )}
 </ListItem>
 </List>
@@ -153,13 +153,13 @@ export default function DetailsFormation() {
                 fontWeight={'500'}
                 textTransform={'uppercase'}
                 mb={'4'}>
-                Features
+                Caractéristiques
               </Text>
 
               <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10}>
                 <List spacing={2}>
-                  <ListItem>date a publier</ListItem>
-                  <ListItem>tarife</ListItem>{' '}
+                  <ListItem>Date a publier</ListItem>
+                  <ListItem>Tarife</ListItem>{' '}
                   
                 </List>
                 <List spacing={2}>

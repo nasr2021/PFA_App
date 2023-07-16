@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
 import { db } from '../firebase/firebase-config';
-import { FiDownload } from 'react-icons/fi';
+import { FiDownload,FiTrash } from 'react-icons/fi';
 import { IconButton ,Icon } from '@chakra-ui/react';
 export default function ReportTable() {
   const [archive, setArchive] = useState([]);
@@ -21,7 +21,20 @@ export default function ReportTable() {
 
     fetchArchive();
   }, []);
-
+  const handleDeleteArchive = (archiveId) => {
+    // Delete the archive with the provided ID
+    db.collection('archive')
+      .doc(archiveId)
+      .delete()
+      .then(() => {
+        // Archive successfully deleted, perform any necessary actions
+        console.log('Archive deleted:', archiveId);
+      })
+      .catch((error) => {
+        // An error occurred while deleting the archive
+        console.error('Error deleting archive:', archiveId, error);
+      });
+  };
   const openPDF = (pdfUrl) => {
     window.open(pdfUrl, '_blank');
   };
@@ -41,7 +54,7 @@ export default function ReportTable() {
             <Th>Nom de stager</Th>
             <Th>Date</Th>
             <Th>Rapporteur</Th>
-            <Th>Download</Th>
+            <Th>Télécharger</Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -57,7 +70,13 @@ export default function ReportTable() {
                   size="sm"
                   variant="ghost"
                   onClick={() => handleOpenPDF(item.pdf)}
-                />
+                />    <IconButton
+                aria-label="Supprimer"
+                icon={<Icon as={FiTrash} />}
+                size="sm"
+                variant="ghost"
+                onClick={() => handleDeleteArchive(item.archiveId)}
+              />
               </Td>
             </Tr>
           ))}

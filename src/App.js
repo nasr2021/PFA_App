@@ -15,7 +15,7 @@ import Bourse from './pages/Bourse';
 import Stage from './pages/Stage';
 import Logout from './public/profile';
 import DoubleNavbar from './components/Layout/Navebar';
-import Footer from './components/Layout/Footer';
+
 import Card from './components/Shared/Widgets/Card';
 import "leaflet/dist/leaflet.css";
 import GradeTable from './pages/Note';
@@ -33,7 +33,7 @@ import { db,auth } from "./firebase/firebase-config";
 import { useEffect } from "react";
 import DetailsFormation from "./components/Shared/details";
 function App() {
-  const [isAuth, setIsAuth] = useState(true);
+  const [isAuth, setIsAuth] = useState(false);
   console.log(isAuth);
 
   

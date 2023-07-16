@@ -96,16 +96,16 @@ export default function SignupApp() {
                   <Stack direction={["column", "row"]} spacing={4}>
                     
         <FormControl>
-          <FormLabel htmlFor="firstName">First name</FormLabel>
+          <FormLabel htmlFor="firstName">Nom </FormLabel>
             <Input type="text" id="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
            </FormControl>
           <FormControl>
-          <FormLabel htmlFor="lastName">Last name</FormLabel>
+          <FormLabel htmlFor="lastName">Prenom</FormLabel>
           <Input type="text" id="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
           </FormControl></Stack>
 
           <FormControl>
-            <FormLabel>Email</FormLabel>
+            <FormLabel>E-mail</FormLabel>
             <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
           </FormControl>
           <FormControl>

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { db } from '../../../firebase/firebase-config'; 
 import ButtonWidget from './Button';
 const StageCard = ({ stage }) => {
-  const { stageName, responsable, profile, environement, nbreStager, description } = stage;
+  const { stageName, responsable, profile, environement, nbreStager, description ,stageId} = stage;
   return (
     <Box borderWidth="1px" borderRadius="md" p={4} bg="white" mb={4}>
       <Text fontSize="xl" fontWeight="bold" mb={4}>
@@ -26,6 +26,11 @@ const StageCard = ({ stage }) => {
         </Box>
         <Box flex={1}>
           <Text fontSize="lg">{description}</Text>
+          <Flex>
+            
+    
+          <ButtonWidget label="modifier" type="modal20" stageId={stageId}/>
+            <ButtonWidget label="supprimer" type="modal21" stageId={stageId} /></Flex>
         </Box>
       </Flex>
     </Box>

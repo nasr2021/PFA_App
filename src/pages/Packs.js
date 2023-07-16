@@ -36,10 +36,6 @@ export default function Packs() {
   const [subjectsp2, setSubjectsp2] = useState([]);
   const [subjectsp3, setSubjectsp3] = useState([]);
   const [packId, setpackId] = useState("");
-  const handleBuyClick = (packId) => {
-    setpackId(packId);
-    console.log('Achat du pack avec l\'ID:', packId);
-  };
   useEffect(() => {
     const fetchNotes = async () => {
       try {
@@ -55,6 +51,7 @@ export default function Packs() {
           nbrCours: pack.nbrCours,
           nbrFormation: pack.nbrFormation,
           prix: pack.prix,
+
         }));
 
         setSubjectsp1(subjectsDatap1);
@@ -70,6 +67,7 @@ export default function Packs() {
           nbrStage:pack.nbrStage,
           nbrBourse:pack.nbrBourse,
           prix: pack.prix,
+          packId:pack.packId,
         }));
 
         setSubjectsp3(subjectsDatap3);
@@ -85,6 +83,7 @@ export default function Packs() {
           nbrFormation: pack.nbrFormation,
           prix: pack.prix,
           nbrStage:pack.nbrStage,
+          packId:pack.packId,
         }));
 
         setSubjectsp2(subjectsDatap2);
@@ -128,19 +127,19 @@ export default function Packs() {
             <List spacing={3} textAlign="start" px={12}>
               <ListItem>
                 <ListIcon as={FaCheckCircle} color="green.500" />
-               nbre de compte :  {subject.nbrCompte}
+               Nombre de compte :  {subject.nbrCompte}
               </ListItem>
               <ListItem>
                 <ListIcon as={FaCheckCircle} color="green.500" />
-                nbre de cour: {subject.nbrCours}
+                Nombre de cour: {subject.nbrCours}
               </ListItem>
               <ListItem>
                 <ListIcon as={FaCheckCircle} color="green.500" />
-                nbre de formation:{subject.nbrFormation}
+                Nombre de formation:{subject.nbrFormation}
               </ListItem>
             </List>
             <Box w="80%" pt={7} >
-            <ButtonWidget label="Acheter" type="modal16" packId={packId} onClick={() => handleBuyClick(packId)} />
+            <ButtonWidget label="Acheter" type="modal16" packId={subject.packId} />
 
             </Box>
           </VStack></Box>))}
@@ -186,27 +185,27 @@ export default function Packs() {
               <List spacing={3} textAlign="start" px={12}>
                 <ListItem>
                   <ListIcon as={FaCheckCircle} color="green.500" />
-                  nombre de compte: {subject.nbrCompte}
+                  Nombre de compte: {subject.nbrCompte}
                 </ListItem>
                 <ListItem>
                   <ListIcon as={FaCheckCircle} color="green.500" />
-                  nombte de cours : {subject.nbrCours}
+                  Nombre de cours : {subject.nbrCours}
                 </ListItem>
                 <ListItem>
                   <ListIcon as={FaCheckCircle} color="green.500" />
-                 nombre de formation :{subject.nbrFormation}
+                  Nombre de formation :{subject.nbrFormation}
                 </ListItem>
                 <ListItem>
                   <ListIcon as={FaCheckCircle} color="green.500" />
-                  nombre de stage : {subject.nbrStage}
+                  Nombre de stage : {subject.nbrStage}
                 </ListItem>
                 <ListItem>
                   <ListIcon as={FaCheckCircle} color="green.500" />
-                 nombre de bourse :{subject.nbrBourse}
+                  Nombre de bourse :{subject.nbrBourse}
                 </ListItem>
               </List>
               <Box w="80%" pt={7}>
-              <ButtonWidget label="Acheter" type="modal16" packId={packId} onClick={() => handleBuyClick(packId)} />
+              <ButtonWidget label="Acheter" type="modal16" packId={subject.packId}  />
 
               </Box>
             </VStack>
@@ -235,23 +234,23 @@ export default function Packs() {
             <List spacing={3} textAlign="start" px={12}>
               <ListItem>
                 <ListIcon as={FaCheckCircle} color="green.500" />
-               nombre de compte : {subject.nbrCompte}
+                Nombre de compte : {subject.nbrCompte}
               </ListItem>
               <ListItem>
                 <ListIcon as={FaCheckCircle} color="green.500" />
-               nombre de cours :{subject.nbrCours}
+                Nombre de cours :{subject.nbrCours}
               </ListItem>
               <ListItem>
                 <ListIcon as={FaCheckCircle} color="green.500" />
-              nombre de formation :{subject.nbrFormation}
+                Nombre de formation :{subject.nbrFormation}
               </ListItem>
               <ListItem>
                 <ListIcon as={FaCheckCircle} color="green.500" />
-              nombre de stage :{subject.nbrStage}
+                Nombre de stage :{subject.nbrStage}
               </ListItem>
             </List>
             <Box w="80%" pt={7}>
-            <ButtonWidget label="Acheter" type="modal16" packId={packId} onClick={() => handleBuyClick(packId)} />
+            <ButtonWidget label="Acheter" type="modal16" packId={subject.packId}  />
             </Box>
           </VStack>
           </Box>))}</PriceWrapper>

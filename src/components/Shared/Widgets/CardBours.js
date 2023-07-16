@@ -31,7 +31,7 @@ const Feature = ({ text, icon, iconBg }: FeatureProps) => {
 };
 
 export default function SplitWithImage({bourse}) {
-  const { date, image, nomBourse, state, prix,  description } = bourse;
+  const { date, image, nomBourse, state, prix, bourseId, description } = bourse;
   return (
   
       
@@ -52,10 +52,12 @@ export default function SplitWithImage({bourse}) {
             >
               Decrocher une bourse
             </Text>
+           
             <Heading mb={3}>{nomBourse}</Heading>
             <Text color="gray.500" fontSize="lg">
               {description}
             </Text>
+           
             <Stack
               mt={2}
               spacing={4}
@@ -78,6 +80,9 @@ export default function SplitWithImage({bourse}) {
               />
             </Stack>
           </motion.div>
+          <Flex>
+          <ButtonWidget label="modifier" type="modal17" bourseId={bourseId}/>
+            <ButtonWidget label="supprimer" type="modal18" bourseId={bourseId} /></Flex>
         </Stack>
         <Flex>
           <motion.div initial={{ x: -100, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ duration: 0.5 }}>

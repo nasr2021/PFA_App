@@ -112,7 +112,7 @@ import { db, auth } from '../../firebase/firebase-config';
       </Box>
     ))
   ) : (
-    <span>No comments available</span>
+    <span>Aucun commentaire disponible</span>
   )}
 </ListItem>
 </List> </VStack>
@@ -153,14 +153,14 @@ import { db, auth } from '../../firebase/firebase-config';
                   fontWeight={'500'}
                   textTransform={'uppercase'}
                   mb={'4'}>
-                  Features
+                  Caractéristiques
                 </Text>
   
                 <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10}>
                   <List spacing={2}>
-                    <ListItem>date a publier</ListItem>
-                    <ListItem>tarife</ListItem>{' '}
-                    <ListItem>profname</ListItem>
+                    <ListItem>Date a publier</ListItem>
+                    <ListItem>Tarife</ListItem>{' '}
+                    <ListItem>Nom de profe</ListItem>
                   </List>
                   <List spacing={2}>
                     <ListItem>{formationData.date}</ListItem>

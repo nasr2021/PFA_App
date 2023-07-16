@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
   Box,
   Button,
@@ -213,26 +213,10 @@ const PaymentForm = () => {
   );
 };
 
-const steps = ["Basic information",  "Personal Information",  "Personal Information","Contact Information"];
+const steps = ["Informations de base",  "Informations personnelles",  "Informations personnelles"," Coordonnées"];
 
 const SchoolForm = () => {
-  const methods = useForm({
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-      emailAddress: "",
-      adresse: "",
-      dateNaissance: "",
-      lieuNaissance: "",
-      cin: "",
-      cycle: "",
-      niveaux: "",
-      specialite: "",
-      situation: "",
-      sexe: "",
-      nationalite: "",
-    },
-  });
+  const methods = useForm();
   const [activeStep, setActiveStep] = useState(0);
   const toast = useToast();
 
@@ -253,8 +237,32 @@ const SchoolForm = () => {
         return null;
     }
   };
+  const [userData, setUserData] = useState(null);
+  
+  useEffect(() => {
+    const user = auth.currentUser;
+    if (user) {
+      const userId = user.uid; // Récupérer l'ID de l'utilisateur actuel
+      const userRef = db.collection("user").doc(userId); // Référence du document de l'utilisateur
 
+      userRef
+        .get()
+        .then((doc) => {
+          if (doc.exists) {
+            setUserData(doc.data());
+          }
+        })
+        .catch((error) => {
+          console.error("Error retrieving user data:", error);
+        });
+    }
+  }, []);
 
+  useEffect(() => {
+    if (userData) {
+      methods.reset(userData); // Mettre à jour les valeurs par défaut du formulaire avec les données de l'utilisateur
+    }
+  }, [userData]);
 
   const handleNext = (data) => {
     if (activeStep === steps.length - 1) {
@@ -336,7 +344,7 @@ const SchoolForm = () => {
 
   return (
     <Box m={[2, 4, 6, 8]} p={[2, 4, 6, 8]} border={"8px"} borderColor={"white"}>
-    <Heading mb={4}>School Registration Form</Heading>
+    <Heading mb={4}>Formulaire d'inscription à l'école</Heading>
     <Progress value={((activeStep + 1) / steps.length) * 100} mb={4} />
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(handleNext)}>
@@ -348,7 +356,7 @@ const SchoolForm = () => {
           <HStack spacing={4} justify={activeStep === 0 ? "flex-end" : "space-between"}>
             {activeStep !== 0 && (
               <Button colorScheme="gray" onClick={handleBack}>
-                Back
+                arrière
               </Button>
             )}
             <Button colorScheme="blue" type="submit">

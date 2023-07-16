@@ -90,8 +90,14 @@ export default function SignupEtudiant() {
   
   
   return (
-    <Box bg="hsl(0, 0%, 96%)" mx={12}>
-    <Flex direction={["column", "row"]} align="center" justify="center" py={5} flex={1} >
+    <Flex
+    height="100%"
+    direction={['column', 'row']}
+    align="center"
+    justify="center"
+    p={10}
+    flex={1}
+  >
       <Box flex="1" mb={[5, 0]} textAlign={["center", "start"]}>
         <Text as="h1" fontSize="6xl" fontWeight="bold" letterSpacing="tight" my={5}>
         SmartEduHub.com <br />
@@ -115,16 +121,16 @@ export default function SignupEtudiant() {
                   <Stack direction={["column", "row"]} spacing={4}>
                     
         <FormControl>
-          <FormLabel htmlFor="firstName">First name</FormLabel>
+          <FormLabel htmlFor="firstName">Nom</FormLabel>
             <Input type="text" id="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
            </FormControl>
           <FormControl>
-          <FormLabel htmlFor="lastName">Last name</FormLabel>
+          <FormLabel htmlFor="lastName">Prenom</FormLabel>
           <Input type="text" id="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
           </FormControl></Stack>
 
           <FormControl>
-            <FormLabel htmlFor="email">Email</FormLabel>
+            <FormLabel htmlFor="email">E-mail</FormLabel>
             <Input type="email" id='email' value={email} onChange={(e) => setEmail(e.target.value)} required />
           </FormControl>
           <FormControl>
@@ -147,7 +153,7 @@ export default function SignupEtudiant() {
           </Box>
         </Flex>
    
-    </Box>
+ 
   );
   
   

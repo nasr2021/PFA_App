@@ -3,7 +3,7 @@ import {Button,Stack,VStack,FormControl,FormLabel,Input,Textarea,Modal,ModalOver
 import { db,storageRef,storage,auth ,fieldValue} from "../../../firebase/firebase-config";
 import FiliereForm from "./fiterForm";
 import { useNavigate } from "react-router-dom";
-const ButtonWidget = ({ label, type,courseId,formationId,packId }) => {
+const ButtonWidget = ({ label, type,courseId,formationId,packId,bourseId ,stageId}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({});
   const [clickCount, setClickCount] = useState(0);
@@ -14,7 +14,57 @@ const ButtonWidget = ({ label, type,courseId,formationId,packId }) => {
   const [selectedTitle, setSelectedTitle] = useState('');
   const [selectedEtudiant, setSelectedEtudiant] = useState('');
   const [selectedEtudiantId, setSelectedEtudiantId] = useState('');
+ 
 
+  useEffect(() => {
+    if (bourseId) {
+      // Récupérer les anciennes données du document bourseId
+      db.collection('bourse')
+        .doc(bourseId)
+        .get()
+        .then((doc) => {
+          if (doc.exists) {
+            const bourseData = doc.data();
+            setFormData({
+              nomBourse: bourseData.nomBourse || '',
+              description: bourseData.description || '',
+              date: bourseData.date || '',
+              prix: bourseData.prix || '',
+              state: bourseData.state || '',
+            });
+          } else {
+            console.log('Le document bourse n\'existe pas');
+          }
+        })
+        .catch((error) => {
+          console.error('Erreur lors de la récupération des données du document bourse:', error);
+        });
+    }else  if (stageId) {
+      // Récupérer les anciennes données du document bourseId
+      db.collection('stage')
+        .doc(stageId)
+        .get()
+        .then((doc) => {
+          if (doc.exists) {
+            const stageData = doc.data();
+            setFormData({
+              environement: stageData.environement || '',
+              description: stageData.description || '',
+              date: stageData.date || '',
+              responsable: stageData.responsable || '',
+              profile: stageData.profile || '',
+              stageName: stageData.stageName || '',
+              mail: stageData.mail || '',
+            });
+          } else {
+            console.log('Le document stageId n\'existe pas');
+          }
+        })
+        .catch((error) => {
+          console.error('Erreur lors de la récupération des données du document stageId:', error);
+        });
+    }
+  }, [bourseId,stageId]);
   const navigate = useNavigate();
   const handleFilterChange = (e) => {
     setSelectedFilter(e.target.value);
@@ -302,43 +352,53 @@ const ButtonWidget = ({ label, type,courseId,formationId,packId }) => {
       .catch((error) => {
         console.error("Erreur lors de l'enregistrement des données :", error);
       });
-    } else if (type === "modal4") {
+    } else 
+    if (type === 'modal4') {
+      if (!formData.fileURL) {
+        console.error("L'URL du fichier est manquante");
+        return;
+      }
+  
       const dataWithFileURL = { ...formData, image: formData.fileURL };
-      db.collection("bourse").add(dataWithFileURL) .then((docRef) => {
-        // Récupérer l'ID du document créé
-        const bourseId = docRef.id;
   
-        // Ajouter l'ID de la formation aux données enregistrées
-        const updatedData = { ...dataWithFileURL, bourseId: bourseId };
+      db.collection('bourse')
+        .add(dataWithFileURL)
+        .then((docRef) => {
+          // Récupérer l'ID du document créé
+          const bourseId = docRef.id;
   
-        // Mettre à jour le document avec l'ID de la bourse
-        db.collection("bourse")
-          .doc(docRef.id)
-          .update(updatedData)   .then(() => {
-            // Ajouter une notification dans la collection "notifications"
-            const notificationData = {
-              text: 'Il y a un nouveau bourse qui est fait',
-              courseName: formData.nomBourse,
-              read:false,
-            };
+          // Ajouter l'ID de la formation aux données enregistrées
+          const updatedData = { ...dataWithFileURL, bourseId: bourseId };
   
-            db.collection('notifications')
-              .add(notificationData)
-              .then(() => {
-                console.log('Notification ajoutée avec succès');
-              })
-              .catch((error) => {
-                console.error('Erreur lors de l\'ajout de la notification:', error);
-              });
-          })
-          .catch((error) => {
-            console.error('Erreur lors de la mise à jour du document:', error);
-          });
-      })
-      .catch((error) => {
-        console.error("Erreur lors de l'enregistrement des données :", error);
-      });
-    } 
+          // Mettre à jour le document avec l'ID de la bourse
+          db.collection('bourse')
+            .doc(docRef.id)
+            .update(updatedData)
+            .then(() => {
+              // Ajouter une notification dans la collection "notifications"
+              const notificationData = {
+                text: 'Il y a un nouveau bourse qui est fait',
+                courseName: formData.nomBourse,
+                read: false,
+              };
+  
+              db.collection('notifications')
+                .add(notificationData)
+                .then(() => {
+                  console.log('Notification ajoutée avec succès');
+                })
+                .catch((error) => {
+                  console.error("Erreur lors de l'ajout de la notification:", error);
+                });
+            })
+            .catch((error) => {
+              console.error('Erreur lors de la mise à jour du document:', error);
+            });
+        })
+        .catch((error) => {
+          console.error("Erreur lors de l'enregistrement des données :", error);
+        });
+    }
     else if (type === "modal5") {
       let pdfValue = '';
       if (formData.fileURL) {
@@ -642,7 +702,7 @@ const ButtonWidget = ({ label, type,courseId,formationId,packId }) => {
       .catch((error) => {
         console.error("Erreur lors de la recherche de la timetable :", error);
       });
-  }else if (type === 'modal16') {
+  }else if (type === 'modal16'&&packId) {
     console.log('packId', packId);
     const user = auth.currentUser;
     const userId = user.uid;
@@ -761,7 +821,61 @@ const ButtonWidget = ({ label, type,courseId,formationId,packId }) => {
       console.error("Erreur lors de la suppression de formationId :", error);
     });
 
-} else if (type === "modal14") {
+} else if (type === "modal17") {
+  console.log("bourse ID:", bourseId);
+  db.collection('bourse')
+  .doc(bourseId)
+  .update(formData)
+  .then(() => {
+    console.log('Le document bourse a été mis à jour avec succès');
+  })
+  .catch((error) => {
+    console.error("Erreur lors de la mise à jour du document bourse :", error);
+  });
+
+}
+else   if (type === 'modal18') {
+  console.log('bourse ID:', bourseId);
+
+  // Supprimer le document de la collection "bourse" avec l'ID correspondant
+  db.collection('bourse')
+    .doc(bourseId)
+    .delete()
+    .then(() => {
+      console.log('Le bourseId a été supprimé avec succès');
+    })
+    .catch((error) => {
+      console.error('Erreur lors de la suppression de bourseId:', error);
+    });
+}
+else if (type === "modal20") {
+  console.log("stageId ID:", stageId);
+  db.collection('stage')
+  .doc(stageId)
+  .update(formData)
+  .then(() => {
+    console.log('Le document stageId a été mis à jour avec succès');
+  })
+  .catch((error) => {
+    console.error("Erreur lors de la mise à jour du document stageId :", error);
+  });
+
+}
+else   if (type === 'modal21') {
+  console.log('stage ID:', stageId);
+
+  // Supprimer le document de la collection "bourse" avec l'ID correspondant
+  db.collection('stage')
+    .doc(stageId)
+    .delete()
+    .then(() => {
+      console.log('Le stageId a été supprimé avec succès');
+    })
+    .catch((error) => {
+      console.error('Erreur lors de la suppression de stageId:', error);
+    });
+}
+else if (type === "modal14") {
   console.log("Cours ID:", formationId);
   const { image, links, video, pdf, ...restData } = formData;
   // Convert the links field to an array if it has a value
@@ -891,7 +1005,7 @@ const dataWithFileURL = {
       </FormControl>
     
           <FormControl>
-            <FormLabel htmlFor="title">Title</FormLabel>
+            <FormLabel htmlFor="title">Titre</FormLabel>
             <Input type="text" id="title" name="title" value={formData.title || ""} onChange={(e) => handleInputChange(e, "title")} />
           </FormControl>
     
@@ -942,11 +1056,11 @@ const dataWithFileURL = {
       return (
         <>
           <FormControl>
-            <FormLabel htmlFor="stageName">Stage Name</FormLabel>
+            <FormLabel htmlFor="stageName">Nom de stage </FormLabel>
             <Input type="text" id="stageName" name="stageName" value={formData.stageName || ""} onChange={(e) => handleInputChange(e, "stageName")} />
           </FormControl>
           <FormControl>
-            <FormLabel htmlFor="nbreStager">Number of Stagers</FormLabel>
+            <FormLabel htmlFor="nbreStager">Nombre de Stager</FormLabel>
             <Input type="number" id="nbreStager" name="nbreStager" value={formData.nbreStager || ""} onChange={(e) => handleInputChange(e, "nbreStager")} />
           </FormControl>
           <FormControl>
@@ -970,6 +1084,49 @@ const dataWithFileURL = {
             <FormLabel htmlFor="description">Description</FormLabel>
             <Textarea id="description" name="description" value={formData.description || ""} onChange={(e) => handleInputChange(e, "description")} />
           </FormControl>
+          <FormControl>
+            <FormLabel htmlFor="mail">E-mail</FormLabel>
+            <Input type="email" id="mail" name="mail" value={formData.mail || ""} onChange={(e) => handleInputChange(e, "mail")} />
+          </FormControl>
+        </>
+      );
+    }
+    else if (type === "modal20") {
+      return (
+        <>
+          <FormControl>
+            <FormLabel htmlFor="stageName">Nom de stage </FormLabel>
+            <Input type="text" id="stageName" name="stageName" value={formData.stageName } onChange={(e) => handleInputChange(e, "stageName")} />
+          </FormControl>
+          <FormControl>
+            <FormLabel htmlFor="nbreStager">Nombre de Stager</FormLabel>
+            <Input type="number" id="nbreStager" name="nbreStager" value={formData.nbreStager } onChange={(e) => handleInputChange(e, "nbreStager")} />
+          </FormControl>
+          <FormControl>
+            <FormLabel htmlFor="responsable">Responsable</FormLabel>
+            <Input type="text" id="responsable" name="responsable" value={formData.responsable } onChange={(e) => handleInputChange(e, "responsable")} />
+          </FormControl>
+          <FormControl>
+            <FormLabel htmlFor="environement">Environment</FormLabel>
+            <Input type="text" id="environement" name="environement" value={formData.environement } onChange={(e) => handleInputChange(e, "environement")} />
+          </FormControl>
+          <FormControl>
+            <FormLabel htmlFor="profile">Profile</FormLabel>
+            <Input type="text" id="profile" name="profile" value={formData.profile } onChange={(e) => handleInputChange(e, "profile")} />
+          </FormControl>
+          <FormControl>
+  <FormLabel htmlFor="date">Date</FormLabel>
+  <Input type="date" id="date" name="date" value={formData.date } min={getCurrentDate()} onChange={(e) => handleInputChange(e, "date")} />
+</FormControl>
+
+          <FormControl>
+            <FormLabel htmlFor="description">Description</FormLabel>
+            <Textarea id="description" name="description" value={formData.description } onChange={(e) => handleInputChange(e, "description")} />
+          </FormControl>
+          <FormControl>
+            <FormLabel htmlFor="mail">E-mail</FormLabel>
+            <Input type="email" id="mail" name="mail" value={formData.mail} onChange={(e) => handleInputChange(e, "mail")} />
+          </FormControl>
         </>
       );
     } else if (type === "modal4") {
@@ -980,7 +1137,7 @@ const dataWithFileURL = {
   <Input id="image" type="file" onChange={handleFilesChange} />
 </FormControl>
           <FormControl>
-            <FormLabel htmlFor="nomBourse">Nom Bourse</FormLabel>
+            <FormLabel htmlFor="nomBourse">Nom de bourse</FormLabel>
             <Input type="text" id="nomBourse" name="nomBourse" value={formData.nomBourse || ""} onChange={(e) => handleInputChange(e, "nomBourse")}/>
           </FormControl>
           <FormControl>
@@ -996,8 +1153,38 @@ const dataWithFileURL = {
             <Input type="number" id="prix" name="prix" value={formData.prix || ""} onChange={(e) => handleInputChange(e, "prix")} />
           </FormControl>
           <FormControl>
-            <FormLabel htmlFor="state">state</FormLabel>
+            <FormLabel htmlFor="state">État</FormLabel>
             <Input type="text" id="state" name="state" value={formData.state || ""} onChange={(e) => handleInputChange(e, "state")} />
+          </FormControl>
+         
+        </>
+      );
+    }else if (type === "modal17") {
+      return (
+        <>
+       <FormControl>
+  <FormLabel htmlFor="image">Image</FormLabel>
+  <Input id="image" type="file" onChange={handleFilesChange} />
+</FormControl>
+          <FormControl>
+            <FormLabel htmlFor="nomBourse">Nom de bourse</FormLabel>
+            <Input type="text" id="nomBourse" name="nomBourse" value={formData.nomBourse } onChange={(e) => handleInputChange(e, "nomBourse")}/>
+          </FormControl>
+          <FormControl>
+            <FormLabel htmlFor="description">Description</FormLabel>
+            <Textarea id="description" name="description" value={formData.description } onChange={(e) => handleInputChange(e, "description")} />
+          </FormControl>
+          <FormControl>
+            <FormLabel htmlFor="date">Date</FormLabel>
+            <Input type="date" id="date" name="date" min={getCurrentDate()}  value={formData.date } onChange={(e) => handleInputChange(e, "date")} />
+          </FormControl>
+          <FormControl>
+            <FormLabel htmlFor="prix">Prix</FormLabel>
+            <Input type="number" id="prix" name="prix" value={formData.prix } onChange={(e) => handleInputChange(e, "prix")} />
+          </FormControl>
+          <FormControl>
+            <FormLabel htmlFor="state">État</FormLabel>
+            <Input type="text" id="state" name="state" value={formData.state} onChange={(e) => handleInputChange(e, "state")} />
           </FormControl>
          
         </>
@@ -1018,7 +1205,7 @@ const dataWithFileURL = {
           {formData.type === "examen" && (
             <>
               <FormControl>
-                <FormLabel htmlFor="profname">Professor Name</FormLabel>
+                <FormLabel htmlFor="profname">Nom de Professeur </FormLabel>
                 <Input type="text" id="profname" name="profname" value={formData.profname || ""} onChange={(e) => handleInputChange(e, "profname")} />
               </FormControl>
               <FormControl>
@@ -1026,7 +1213,7 @@ const dataWithFileURL = {
   <Input type="date" id="date" name="date" value={formData.date || ""} onChange={(e) => handleInputChange(e, "date")} max={getRecentDate()} />
 </FormControl>
               <FormControl>
-                <FormLabel htmlFor="examenname">Examen Name</FormLabel>
+                <FormLabel htmlFor="examenname">Nom de examen</FormLabel>
                 <Input type="text" id="examenname" name="examenname" value={formData.examenname || ""} onChange={(e) => handleInputChange(e, "examenname")} />
               </FormControl>
             
@@ -1041,7 +1228,7 @@ const dataWithFileURL = {
           {formData.type === "pfe" && (
             <>
               <FormControl>
-                <FormLabel htmlFor="stagername">Stager Name</FormLabel>
+                <FormLabel htmlFor="stagername">Nom de Stager </FormLabel>
                 <Input type="text" id="stagername" name="stagername" value={formData.stagername || ""} onChange={(e) => handleInputChange(e, "stagername")} />
               </FormControl>
               <FormControl>
@@ -1094,20 +1281,20 @@ const dataWithFileURL = {
 
          
               <FormControl>
-                <FormLabel htmlFor="matiere">nom de matier</FormLabel>
+                <FormLabel htmlFor="matiere">Nom de matier</FormLabel>
                 <Input type="text" id="matiere" name="matiere" value={formData.matiere || ""} onChange={(e) => handleInputChange(e, "matiere")} />
               </FormControl>
              
               <FormControl>
-                <FormLabel htmlFor="noteOral">note Oral</FormLabel>
+                <FormLabel htmlFor="noteOral">Note Oral</FormLabel>
                 <Input type="text" id="noteOral" name="noteOral" value={formData.noteOral || ""} onChange={(e) => handleInputChange(e, "noteOral")} />
               </FormControl>
               <FormControl>
-                <FormLabel htmlFor="noteDevoirSurveille">note Devoir Surveille</FormLabel>
+                <FormLabel htmlFor="noteDevoirSurveille">note devoir surveille</FormLabel>
                 <Input type="text" id="noteDevoirSurveille" name="noteDevoirSurveille" value={formData.noteDevoirSurveille || ""} onChange={(e) => handleInputChange(e, "noteDevoirSurveille")} />
               </FormControl>
               <FormControl>
-                <FormLabel htmlFor="noteExamen">note Examen</FormLabel>
+                <FormLabel htmlFor="noteExamen">Note examen</FormLabel>
                 <Input type="text" id="noteExamen" name="noteExamen" value={formData.noteExamen || ""} onChange={(e) => handleInputChange(e, "noteExamen")} />
               </FormControl>
 
@@ -1135,7 +1322,7 @@ const dataWithFileURL = {
           {formData.type === "Carte" && (
             <>
               <FormControl>
-                <FormLabel htmlFor="cartnumber">carte number</FormLabel>
+                <FormLabel htmlFor="cartnumber">Numero de carte </FormLabel>
                 <Input type="text" id="cartnumber" name="cartnumber" value={formData.cartnumber || ""}  onChange={(e) => handleInputChange(e, "cartnumber")} />
               </FormControl>
             
@@ -1148,7 +1335,7 @@ const dataWithFileURL = {
           {formData.type === "Point" && (
             <>
               <FormControl>
-                <FormLabel htmlFor="coursnbrs">tu es sure</FormLabel>
+                <FormLabel htmlFor="coursnbrs">Tu es sûre</FormLabel>
                
               </FormControl>
              
@@ -1227,18 +1414,40 @@ const dataWithFileURL = {
       return (
         <> 
       <FormControl>
-            <FormLabel htmlFor="supprimer">ete sur de fait la suppression  ? </FormLabel>
+            <FormLabel htmlFor="supprimer">Tu es sûre ? </FormLabel>
            
           </FormControl>
        
         
       </>
       );
-    }   else if (type === "modal13") {
+    }    else if (type === "modal21") {
       return (
         <> 
       <FormControl>
-            <FormLabel htmlFor="supprimer">ete sur de fait la suppression  ? </FormLabel>
+            <FormLabel htmlFor="supprimer">Tu es sûre ? </FormLabel>
+           
+          </FormControl>
+       
+        
+      </>
+      );
+    }  else if (type === "modal18") {
+      return (
+        <> 
+      <FormControl>
+            <FormLabel htmlFor="supprimer">Tu es sûre  ? </FormLabel>
+           
+          </FormControl>
+       
+        
+      </>
+      );
+    }  else if (type === "modal13") {
+      return (
+        <> 
+      <FormControl>
+            <FormLabel htmlFor="supprimer">Tu es sûre ? </FormLabel>
            
           </FormControl>
        
@@ -1354,7 +1563,7 @@ const dataWithFileURL = {
             {formData.type === "noteS1" && (
               <>
                 <FormControl>
-                  <FormLabel htmlFor="profname">Professor Name</FormLabel>
+                  <FormLabel htmlFor="profname">Nom de professeur </FormLabel>
                   <Input type="text" id="profname" name="profname" value={formData.profname || ""} onChange={(e) => handleInputChange(e, "profname")}  />
                 </FormControl>
                 <FormControl>
@@ -1362,7 +1571,7 @@ const dataWithFileURL = {
     <Input type="date" id="date" name="date" value={formData.date || ""} onChange={(e) => handleInputChange(e, "date")}  max={getRecentDate()} />
   </FormControl>
                 <FormControl>
-                  <FormLabel htmlFor="examenname">Examen Name</FormLabel>
+                  <FormLabel htmlFor="examenname">Nom d'examen </FormLabel>
                   <Input type="text" id="examenname" name="examenname" value={formData.examenname || ""}   onChange={(e) => handleInputChange(e, "examenname")}  />
                 </FormControl>
               
@@ -1377,11 +1586,11 @@ const dataWithFileURL = {
             {formData.type === "notes2" && (
               <>
                 <FormControl>
-                  <FormLabel htmlFor="stagername">Stager Name</FormLabel>
+                  <FormLabel htmlFor="stagername">Nom de stager </FormLabel>
                   <Input type="text" id="stagername" name="stagername" value={formData.stagername || ""} onChange={(e) => handleInputChange(e, "stagername")}  />
                 </FormControl>
                 <FormControl>
-                  <FormLabel htmlFor="presidentdate">President Date</FormLabel>
+                  <FormLabel htmlFor="presidentdate">Date</FormLabel>
                   <Input type="date" id="presidentdate" name="presidentdate" value={formData.presidentdate || ""}  onChange={(e) => handleInputChange(e, "presidentdate")}   max={getRecentDate()} />
                 </FormControl>
                 <FormControl>
@@ -1397,7 +1606,7 @@ const dataWithFileURL = {
         return (
           <> 
          <FormControl>
-          <FormLabel htmlFor="titre">nombre de compte</FormLabel>
+          <FormLabel htmlFor="titre">Nombre de compte</FormLabel>
           <Input
             type="text"
             id="nbrCommpte"
@@ -1427,7 +1636,7 @@ const dataWithFileURL = {
           {formData.type === "pack1" && (
           <>
         <FormControl>
-        <FormLabel htmlFor="titre">nombre de compte</FormLabel>
+        <FormLabel htmlFor="titre">Nombre de compte</FormLabel>
         <Input
           type="text"
           id="nbrCommpte"
@@ -1437,7 +1646,7 @@ const dataWithFileURL = {
         />
       </FormControl>
       <FormControl>
-<FormLabel htmlFor="nbrCours">nombre de cours</FormLabel>
+<FormLabel htmlFor="nbrCours">Nombre de cours</FormLabel>
 <Input
   type="text"
   id="nbrCours"
@@ -1447,7 +1656,7 @@ const dataWithFileURL = {
 />
 </FormControl>
 <FormControl>
-<FormLabel htmlFor="nbrFormation">nombre de formation</FormLabel>
+<FormLabel htmlFor="nbrFormation">Nombre de formation</FormLabel>
 <Input
   type="text"
   id="nbrFormation"
@@ -1461,7 +1670,7 @@ const dataWithFileURL = {
           {formData.type === "pack3" && (
           <>
         <FormControl>
-        <FormLabel htmlFor="titre">nombre de compte</FormLabel>
+        <FormLabel htmlFor="titre">Nombre de compte</FormLabel>
         <Input
           type="text"
           id="nbrCommpte"
@@ -1471,7 +1680,7 @@ const dataWithFileURL = {
         />
       </FormControl>
       <FormControl>
-<FormLabel htmlFor="nbrCours">nombre de cours</FormLabel>
+<FormLabel htmlFor="nbrCours">Nombre de cours</FormLabel>
 <Input
   type="text"
   id="nbrCours"
@@ -1481,7 +1690,7 @@ const dataWithFileURL = {
 />
 </FormControl>
 <FormControl>
-<FormLabel htmlFor="nbrFormation">nombre de formation</FormLabel>
+<FormLabel htmlFor="nbrFormation">Nombre de formation</FormLabel>
 <Input
   type="text"
   id="nbrFormation"
@@ -1491,7 +1700,7 @@ const dataWithFileURL = {
 />
 </FormControl>
 <FormControl>
-<FormLabel htmlFor="nbrStage">nombre de stage</FormLabel>
+<FormLabel htmlFor="nbrStage">Nombre de stage</FormLabel>
 <Input
   type="text"
   id="nbrStage"
@@ -1501,7 +1710,7 @@ const dataWithFileURL = {
 />
 </FormControl>
 <FormControl>
-<FormLabel htmlFor="nbrBourse">nombre de bourse</FormLabel>
+<FormLabel htmlFor="nbrBourse">Nombre de bourse</FormLabel>
 <Input
   type="text"
   id="nbrBourse"
@@ -1513,7 +1722,7 @@ const dataWithFileURL = {
 {formData.type === "pack2" && (
           <>
         <FormControl>
-        <FormLabel htmlFor="titre">nombre de compte</FormLabel>
+        <FormLabel htmlFor="titre">Nombre de compte</FormLabel>
         <Input
           type="text"
           id="nbrCommpte"
@@ -1523,7 +1732,7 @@ const dataWithFileURL = {
         />
       </FormControl>
       <FormControl>
-<FormLabel htmlFor="nbrCours">nombre de cours</FormLabel>
+<FormLabel htmlFor="nbrCours">Nombre de cours</FormLabel>
 <Input
   type="text"
   id="nbrCours"
@@ -1533,7 +1742,7 @@ const dataWithFileURL = {
 />
 </FormControl>
 <FormControl>
-<FormLabel htmlFor="nbrFormation">nombre de formation</FormLabel>
+<FormLabel htmlFor="nbrFormation">Nombre de formation</FormLabel>
 <Input
   type="text"
   id="nbrFormation"
@@ -1543,7 +1752,7 @@ const dataWithFileURL = {
 />
 </FormControl>
 <FormControl>
-<FormLabel htmlFor="nbrStage">nombre de stage</FormLabel>
+<FormLabel htmlFor="nbrStage">Nombre de stage</FormLabel>
 <Input
   type="text"
   id="nbrStage"
@@ -1582,7 +1791,7 @@ const dataWithFileURL = {
                 Submit
               </Button>
               <Button onClick={handleCloseModal} colorScheme="gray" size="md">
-                Cancel
+                Enregistrer
               </Button>
             </ModalFooter>
           </form>
