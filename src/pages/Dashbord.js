@@ -106,12 +106,7 @@ function Dashboard(){
     fetchCours();
     fetchComplaints();
   }, []);
-  const weatherData = {
-    city: 'Paris',
-    temperature: 25,
-    description: 'Ensoleillé',
-    icon: 'https://example.com/weather-icon.png',
-  };
+
 
     const chartData = [
         { name: "Jan", sales: 100 },

@@ -34,8 +34,17 @@ import { useEffect } from "react";
 import DetailsFormation from "./components/Shared/details";
 function App() {
   const [isAuth, setIsAuth] = useState(false);
-  console.log(isAuth);
 
+  useEffect(() => {
+    const storedAuth = localStorage.getItem('isAuthenticated');
+    if (storedAuth) {
+      setIsAuth(JSON.parse(storedAuth));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('isAuthenticated', isAuth);
+  }, [isAuth]);
   
   return (
     <Router>

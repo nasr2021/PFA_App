@@ -1,5 +1,5 @@
 import React, { useState ,useEffect} from 'react';
-import { Box, Flex, Select, Button, FormControl, FormLabel, Input, Stack, Image,Text ,Container} from '@chakra-ui/react';
+import { Box, Flex,useBreakpointValue, Select, Button, FormControl, FormLabel, Input, Stack, Image,Text ,Container} from '@chakra-ui/react';
 import { auth, db } from '../../firebase/firebase-config';
 
 export default function SignupEtudiant() {
@@ -87,7 +87,11 @@ export default function SignupEtudiant() {
       // Gérer l'erreur (par exemple, afficher un message d'erreur)
     }
   };
-  
+  const boxSize = useBreakpointValue({ base: '100%', sm: '100%', md: '100%', lg: '50vw' });
+  const textAlign = useBreakpointValue({ base: 'center', sm: 'center', md: 'start', lg: 'start' });
+  const fontSize = useBreakpointValue({ base: 'xl', sm: 'xl', md: '2xl', lg: '6xl' });
+  const display = useBreakpointValue({ base: 'flex', sm: 'flex', md: 'flex', lg: 'flex' });
+
   
   return (
     <Flex
@@ -97,23 +101,20 @@ export default function SignupEtudiant() {
     justify="center"
     p={10}
     flex={1}
-  >
-      <Box flex="1" mb={[5, 0]} textAlign={["center", "start"]}>
-        <Text as="h1" fontSize="6xl" fontWeight="bold" letterSpacing="tight" my={5}>
-        SmartEduHub.com <br />
-          
-        </Text>
-        <Text color="hsl(217, 10%, 50.8%)" mb={5}>
-        SmartEduHub.com est un site web d'éducation en ligne qui
-         offre une plateforme conviviale et attrayante pour
-         les étudiants et les professionnels souhaitant approfondir 
-         leurs connaissances
-        </Text>
-      </Box>
+  > <Box display={display}>
+  <Box flex="1" mb={[5, 0]} textAlign={textAlign}>
+    <Text as="h1" fontSize={fontSize} fontWeight="bold" letterSpacing="tight" my={5}>
+      SmartEduHub.com <br />
+    </Text>
+    <Text color="hsl(217, 10%, 50.8%)" mb={5}  >
+      SmartEduHub.com est un site web d'éducation en ligne qui offre une plateforme conviviale et attrayante pour les étudiants et les professionnels souhaitant approfondir leurs connaissances
+    </Text>
+  </Box>
+  </Box>
 
-      <Box flex="1" ml={[0, 10]} w={"50vw"}>
-        <Box bg="white" borderRadius="md" boxShadow="md" py={5} px={[4, 10]}>
-         
+  <Box flex="1" ml={[0, 10]} w={boxSize} mt={5}>
+        <Box bg="white" borderRadius="md" boxShadow="md" py={5} px={[4, 10]} h={["60vh","50vh"]}>
+           
     <form onSubmit={handleCreateActualite}>
 
       

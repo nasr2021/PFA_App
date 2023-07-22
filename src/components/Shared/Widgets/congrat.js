@@ -24,19 +24,19 @@ const CongratulationCard = () => {
      } }, []);
   return (
     <Box
-      width={"auto"}
+    width={["100%", "auto"]}
       borderWidth="1px"
       borderRadius="md"
-      p={4} mt={5} mb={5} ml={5}
+      p={[2, 4]} mt={[3, 5]} mb={[3, 5]} mx={[2, 5]}
       bgImage="url('https://img.freepik.com/free-vector/realistic-golden-confetti-background_52683-26885.jpg?size=626&ext=jpg&ga=GA1.1.15564180.1673732749&semt=sph')"
       bgSize="cover"
       bgPosition="center"
      // boxShadow="md"
     >
-      <Text fontSize="xl" fontWeight="bold" mb={4} align={"center"}>
+      <Text fontSize={["lg", "xl"]} fontWeight="bold" mb={4}  align={"center"}>
         Félicitations, vous êtes connecté !
       </Text>
-      <Text fontSize="lg" align={"center"} >
+      <Text fontSize={["md", "lg"]} align={"center"} >
         Bienvenue, <b>{userDocument?.firstName} {userDocument?.lastName}</b> !
       </Text>
     </Box>

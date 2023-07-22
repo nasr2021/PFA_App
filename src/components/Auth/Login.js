@@ -27,21 +27,23 @@ export default function LoginApp({ setIsAuth,isAuth }) {
       setIsAuth(JSON.parse(storedAuth));
     }
   }, []);
+
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       await auth.signInWithEmailAndPassword(email, password);
-      // Connexion réussie, naviguer vers une autre page
       const user = auth.currentUser;
       const userId = user.uid;
       await db.collection('user').doc(userId).update({
         stat: true,
       });
+
       setIsAuth(true);
+      localStorage.setItem('isAuthenticated', true); // Store the authentication status in local storage
       navigate('/Dashboard');
     } catch (error) {
-      console.error('Erreur lors de la connexion :', error);
-      setErrorMessage('Adresse e-mail ou mot de passe incorrect');
+      console.error('Error logging in:', error);
+      setErrorMessage('Incorrect email address or password');
     }
   };
   const handleSignupClick = () => {

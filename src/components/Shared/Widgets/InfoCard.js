@@ -21,25 +21,28 @@ const InfoCard = ({ title, value }) => {
         bg={useColorModeValue("white", "gray.800")}
         borderRadius="md"
         boxShadow="md"
-        p={4} borderLeft={"8px"} borderLeftColor={randomColor}
+        p={4}
+        borderLeft={["0", "8px"]} 
+        borderLeftColor={randomColor}
         textAlign="center"
-        transition="all 0.3s ease"
+        transition="transform 0.3s ease" 
         _hover={{ transform: "scale(1.05)" }}
       >
         <Text
-          fontSize="lg"
+          fontSize={["md", "lg"]} 
           fontWeight="bold"
           mb={2}
           color={useColorModeValue("gray.800", "white")}
         >
           {title}
         </Text>
-        <Text fontSize="3xl" fontWeight="bold" color={randomColor} >
+        <Text fontSize={["2xl", "3xl"]} fontWeight="bold" color={randomColor}> 
           {value}
         </Text>
       </Box>
     </motion.div>
   );
+  
 };
 
 export default InfoCard;

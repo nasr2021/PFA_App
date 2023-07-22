@@ -71,25 +71,29 @@ export default function SignupApp() {
 
   
   return (
-    <Box  mx={12} bg={"gray.100"} >
-      <Flex direction={["column", "row"]} align="center" justify="center" py={5} flex={1} >
-        
-        <Box flex="1" textAlign={textAlign} mb={[5, 0]} textAlign={["center", "start"]}>
-          <Text as="h1"   display={display} fontSize={fontSize} fontWeight="bold" letterSpacing="tight" my={5}>
-          SmartEduHub.com <br />
-            
-          </Text>
-          <Text   display={display} color="hsl(217, 10%, 50.8%)" mb={5}>
-          SmartEduHub.com est un site web d'éducation en ligne qui
-           offre une plateforme conviviale et attrayante pour
-           les étudiants et les professionnels souhaitant approfondir 
-           leurs connaissances
-          </Text>
-        </Box>
+    <Flex
+    height="100%"
+    direction={['column', 'row']}
+    align="center"
+    justify="center"
+    p={10}
+    flex={1}
+  >
+      <Box display={display}>
+    <Box flex="1" mb={[5, 0]} textAlign={textAlign}>
+      <Text as="h1" fontSize={fontSize} fontWeight="bold" letterSpacing="tight" my={5}>
+        SmartEduHub.com <br />
+      </Text>
+      <Text color="hsl(217, 10%, 50.8%)" mb={5}  >
+        SmartEduHub.com est un site web d'éducation en ligne qui offre une plateforme conviviale et attrayante pour les étudiants et les professionnels souhaitant approfondir leurs connaissances
+      </Text>
+    </Box>
+    </Box>
 
-        <Box flex="1" ml={[0, 10]} w={boxSize} mt={12}>
-          <Box bg="white" borderRadius="md" mt={12} boxShadow="md" py={5} px={[4, 10]}>
-            
+      
+    <Box flex="1" ml={[0, 10]} w={boxSize} mt={5}>
+        <Box bg="white" borderRadius="md" boxShadow="md" py={5} px={[4, 10]} h={["60vh","50vh"]}>
+     
       <form onSubmit={handleSignup}>
 
       <Stack spacing={4}>
@@ -131,9 +135,7 @@ export default function SignupApp() {
           </Stack>
       </form>
       </Box>
-          </Box>
-        </Flex>
-   
-    </Box>
+      </Box>
+    </Flex>
   );
 }

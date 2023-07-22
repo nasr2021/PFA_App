@@ -53,14 +53,16 @@ const Sidebar = ({active,setIsAuth,isAuth}) => {
         await db.collection('user').doc(userId).update({
           stat: false
         });
+    
         setIsAuth(false);
-      //  localStorage.removeItem('isAuth');
+        localStorage.removeItem('isAuthenticated'); // Remove the authentication status from local storage
         // Perform other actions after successful logout
       } catch (error) {
         console.error('Error during logout:', error);
         // Handle the error (e.g., display an error message)
       }
     };
+    
     
     
     return (

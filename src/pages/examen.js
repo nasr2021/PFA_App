@@ -21,9 +21,8 @@ const ExamTable = ({ exams }) => {
       });
   };
   return (
-    <Box borderWidth="1px" borderRadius="md" p={3} bg="white" overflowX="auto">
-      <Table variant="simple" overflowX={'auto'}>
-        <Thead>
+    <Box borderWidth="1px" borderRadius="md" p={3} bg="white" overflowX={{ base: "auto", sm: "hidden" }}>
+    <Table variant="simple" overflowX="auto"> <Thead>
           <Tr>
             <Th>
               <Checkbox />
@@ -40,9 +39,9 @@ const ExamTable = ({ exams }) => {
               <Td>
                 <Checkbox />
               </Td>
-              <Td>{exam.examenname}</Td>
-              <Td>{exam.date}</Td>
-              <Td>{exam.profname}</Td>
+              <Td fontSize={{ base: "sm", md: "md" }}>{exam.examenname}</Td>
+              <Td fontSize={{ base: "sm", md: "md" }}>{exam.date}</Td>
+              <Td fontSize={{ base: "sm", md: "md" }}>{exam.profname}</Td>
               <Td><Flex>
                 <IconButton
                   aria-label="Télécharger"
